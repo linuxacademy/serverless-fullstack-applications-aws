@@ -14,7 +14,7 @@ def add_random_data_to_table(num_items, dynamo_table):
     """ Seeds DynamoDB table with random data """
     counter = 0
     while counter < num_items:
-        response = dynamo_table.put_item(
+        dynamo_table.put_item(
             Item={
                 'PartnerName': fake.name(),
                 'email': fake.company_email(),
@@ -29,7 +29,7 @@ def add_random_data_to_table(num_items, dynamo_table):
 add_random_data_to_table(150, partner_table)
 
 # Put specific required values in the table
-response = partner_table.put_item(
+partner_table.put_item(
     Item={
         'PartnerName': 'dummy_name_delete_b4_demo',
         'email': 'Dummyemail@emails.com',
@@ -38,7 +38,7 @@ response = partner_table.put_item(
     }
 )
 
-response = partner_table.put_item(
+partner_table.put_item(
     Item={
         'PartnerName': 'ProTowTires',
         'email': 'greg@protowtires.com',
