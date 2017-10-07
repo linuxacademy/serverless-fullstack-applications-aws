@@ -8,7 +8,6 @@ import time
 from faker import Faker
 
 fake = Faker()
-partner_table = boto3.resource('dynamodb').Table('PrometheonPartners')
 
 def add_random_data_to_table(num_items, dynamo_table):
     """ Seeds DynamoDB table with random data """
@@ -26,26 +25,35 @@ def add_random_data_to_table(num_items, dynamo_table):
         counter += 1
 
 # Add some random data to the table 
-add_random_data_to_table(150, partner_table)
-
-# Put specific required values in the table
-partner_table.put_item(
-    Item={
-        'PartnerName': 'dummy_name_delete_b4_demo',
-        'email': 'Dummyemail@emails.com',
-        'address': fake.address(),
-        'clientDealValue': 'No money, I\'m a dummy value!'
-    }
-)
-
-partner_table.put_item(
-    Item={
-        'PartnerName': 'ProTowTires',
-        'email': 'greg@protowtires.com',
-        'address': fake.address(),
-        'clientDealValue': 'OVER NINE-THOUSAND!!!!'
-    }
-)
-
-# Add another 50 random values 
-add_random_data_to_table(50, partner_table)
+def handler(event, context):
+    print(event)
+    print(context)
+    # Handles the case this is called when stack is deleting
+    if event['RequestType'] == 'Delete':
+        return "SUCCESS"
+    
+    partner_table = boto3.resource('dynamodb').Table('PrometheonPartners')
+    add_random_data_to_table(150, partner_table)
+    
+    # Put specific required values in the table
+    partner_table.put_item(
+        Item={
+            'PartnerName': 'dummy_name_delete_b4_demo',
+            'email': 'Dummyemail@emails.com',
+            'address': fake.address(),
+            'clientDealValue': 'No money, I\'m a dummy value!'
+        }
+    )
+    
+    partner_table.put_item(
+        Item={
+            'PartnerName': 'ProTowTires',
+            'email': 'greg@protowtires.com',
+            'address': fake.address(),
+            'clientDealValue': 'OVER NINE-THOUSAND!!!!'
+        }
+    )
+    
+    # Add another 50 random values 
+    add_random_data_to_table(50, partner_table)
+    return "SUCCESS"
