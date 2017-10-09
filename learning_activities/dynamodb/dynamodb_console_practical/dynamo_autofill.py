@@ -19,7 +19,7 @@ def add_random_data_to_table(num_items, dynamo_table):
                 'UserEmail': fake.company_email(),
                 'name': fake.name(),
                 'address': fake.address(),
-                'plan': random.choice("Platinum", "Gold", "Silver", "Bronze", "Trial")
+                'plan': random.choice(["Platinum", "Gold", "Silver", "Bronze", "Trial"])
             }
         )
         time.sleep(0.1)
