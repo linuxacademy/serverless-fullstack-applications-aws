@@ -29,9 +29,11 @@ def add_random_data_to_table(num_items, dynamo_table):
 def handler(event, context):
     print(event)
     print(context)
-    # Handles the case this is called when stack is deleting
+    
+    # Handles the case when this is called during deletion
     if event['RequestType'] == 'Delete':
-        return "SUCCESS"
+        cf_response.send(event, context, "SUCCESS", {"Status": "SUCCESS"})
+        return 'SUCCESS'
     
     partner_table = boto3.resource('dynamodb').Table('PrometheonPartners')
     add_random_data_to_table(150, partner_table)
