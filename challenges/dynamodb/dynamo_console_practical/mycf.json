@@ -28,7 +28,7 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-            "S3Bucket": "linuxacademy_cfn_lambdas",
+            "S3Bucket": "linuxacademy_cfn_lambdas_test",
             "S3Key": "sls1_s2_lab1_dynamodb_console_practical_datalaoder.zip"
         },
         "Handler": "dynamo_autofill.handler",

@@ -3,6 +3,7 @@
 # Creates fake data and pushes it to a dynamoDB Table
 
 import boto3
+import cf_response
 import random
 import time
 from faker import Faker
@@ -56,4 +57,6 @@ def handler(event, context):
     
     # Add another 50 random values 
     add_random_data_to_table(50, partner_table)
-    return "SUCCESS"
+
+    # Return resposne to CloudFormation saying this was successful
+    cf_response.send(event, context, "SUCCESS", {"Status": "SUCCESS"})
