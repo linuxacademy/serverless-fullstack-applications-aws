@@ -1,0 +1,84 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Resources" : {
+    "SLS1ClientsTable" : {
+      "Type" : "AWS::DynamoDB::Table",
+      "Properties" : {
+        "AttributeDefinitions" : [
+          {
+            "AttributeName" : "ClientEmail",
+            "AttributeType" : "S"
+          }
+        ],
+        "KeySchema" : [
+          {
+            "AttributeName" : "ClientEmail",
+            "KeyType" : "HASH"
+          }
+        ],
+        "ProvisionedThroughput" : {
+          "ReadCapacityUnits" : "5",
+          "WriteCapacityUnits" : "5"
+        },
+        "TableName" : "ClientsTable"
+        }
+    },
+    "DynamoDBDataLoaderFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+            "S3Bucket": "linuxacademy_cfn_lambdas_test",
+            "S3Key": "sls1_s2_lab4_dynamodb_aws_sdk_practical_datalaoder.zip"
+        },
+        "Handler": "dynamo_autofill.handler",
+        "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },        
+        "Runtime": "python3.6",
+        "Timeout": "60"
+      },
+      "DependsOn" : "LambdaExecutionRole"
+    },
+    "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+              "Effect": "Allow",
+              "Principal": {"Service": ["lambda.amazonaws.com"]},
+              "Action": ["sts:AssumeRole"]
+          }]
+        },
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "root",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [{
+                "Effect": "Allow",
+                "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+                "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": ["dynamodb:PutItem","dynamodb:UpdateItem","dynamodb:DeleteItem"],
+                "Resource": "arn:aws:dynamodb:*:*:*"
+            }]
+          }
+        }]
+      }
+    },
+    "DataLoader": {
+      "Type": "Custom::DynamoDBDataLoader",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "DynamoDBDataLoaderFunction",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn" : "LambdaExecutionRole"
+    }
+  }
+}
