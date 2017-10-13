@@ -48,8 +48,8 @@ def add_affiliate_trial_data_to_table(num_items, dynamo_table):
     while counter < num_items:
         dynamo_table.put_item(
             Item={
-                'AffiliateEmail': 'affiliate' + str(counter + 1) + '@sarahspenceraffilates.com',
-                'blog': 'sarahspenceraffilates.com',
+                'AffiliateEmail': 'affiliate' + str(counter + 1) + '@sarahspenceraffiliates.com',
+                'blog': 'sarahspenceraffiliates.com',
                 'totalReferrals': random.randrange(3,27),
                 'standing': 'trial'
             }
