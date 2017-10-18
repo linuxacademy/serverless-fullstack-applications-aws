@@ -2,7 +2,7 @@
   "AWSTemplateFormatVersion" : "2010-09-09",
 
   "Resources" : {
-    "SLS1PrometheonPartnersTable" : {
+    "PreppedDynamoDBTable" : {
       "Type" : "AWS::DynamoDB::Table",
       "Properties" : {
         "AttributeDefinitions" : [
@@ -78,7 +78,7 @@
           ]
         }
       },
-      "DependsOn" : "LambdaExecutionRole"
+      "DependsOn" : ["LambdaExecutionRole", "DynamoDBDataLoaderFunction", "PreppedDynamoDBTable"]
     }
   }
 }
