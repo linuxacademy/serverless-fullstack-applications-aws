@@ -28,8 +28,8 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-            "S3Bucket": "linuxacademy_cfn_lambdas_test",
-            "S3Key": "sls1_s2_lab1_dynamodb_console_practical_datalaoder.zip"
+            "S3Bucket": "cloudassessments-lab-files",
+            "S3Key": "aws/s3/dynamodb_console_practical/sls1_s2_lab1_dynamodb_console_practical_datalaoder.zip"
         },
         "Handler": "dynamo_autofill.handler",
         "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },        
