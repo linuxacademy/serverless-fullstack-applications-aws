@@ -24,4 +24,4 @@ deactivate
 rm -r ./.env
 
 echo "Deploying 'package.zip' to AWS"
-aws s3 mv ./package.zip s3://cloudassessments-lab-files/aws/s3/dynamodb_console_practical/sls1_s2_lab2_dynamodb_console_practical_datalaoder.zip
+aws s3 mv ./package.zip s3://cloudassessments-lab-files/aws/s3/dynamodb_console_practical/sls1_s2_lab2_dynamodb_console_practical_datalaoder.zip --acl public-read
