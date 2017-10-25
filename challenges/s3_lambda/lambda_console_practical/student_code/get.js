@@ -8,14 +8,20 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.get = (event, context, callback) => {
   const data = JSON.parse(event.body);
 
-  const params = {
-    TableName: 'PrometheonServiceRecords',
-    Key: {
-      clientId: data.clientId,
-      timestamp: data.timestamp
-    },
-  };
-
+    const params = (data.timestamp) ? {
+      TableName: 'PrometheonServiceRecords',
+      Key: {
+        clientId: data.clientId,
+        timestamp: data.timestamp
+      },
+    } : {
+      TableName: 'PrometheonServiceRecords',
+      Key: {
+        clientId: data.clientId
+      }
+    };
+  }
+  
   // fetch item from DynamoDB
   dynamoDb.get(params, (error, result) => {
     // handle potential errors

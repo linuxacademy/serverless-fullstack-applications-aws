@@ -52,6 +52,31 @@ def add_random_data_to_table(num_items, dynamo_table):
         time.sleep(0.1)
         counter += 1
 
+def add_test_val_for_student_to_check_for()
+    dynamo_table.put_item(
+            Item={
+                'clientId': 'protowtires',
+                'timestamp': '1508961438000',
+                'clientName': 'ProTowTires',
+                'serviceType': 'development',
+                'serviceId': 'development_protowtires_1508961438000',
+                'cost': '5000'
+            }
+        )
+
+def add_test_val_for_us_to_check_for()
+    dynamo_table.put_item(
+            Item={
+                'clientId': 'toystoystoys',
+                'timestamp': '1508961438000',
+                'clientName': 'Toys Toys Toys',
+                'serviceType': 'development',
+                'serviceId': 'development_toystoystoys_1508961438000',
+                'cost': '10000'
+            }
+        )
+
+
 # Add some random data to the table 
 def handler(event, context):
     print(event)
