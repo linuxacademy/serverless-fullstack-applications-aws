@@ -25,3 +25,8 @@ rm -r ./.env
 
 echo "Deploying 'package.zip' to AWS"
 aws s3 mv ./package.zip s3://cloudassessments-lab-files/aws/s3/lambda_console_practical/sls1_s3_lab1_lambda_console_practical_datalaoder.zip --acl public-read
+
+echo "Deployinh 'createjs.zip to AWS"
+zip createjs.zip create.js
+aws s3 mv ./createjs.zip s3://cloudassessments-lab-files/aws/s3/lambda_console_practical/sls1_s3_lab1_lambda_console_practical_createjs.zip --acl public-read
+rm createjs.zip 
