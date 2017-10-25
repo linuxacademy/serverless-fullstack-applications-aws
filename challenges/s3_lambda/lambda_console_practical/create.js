@@ -8,16 +8,6 @@ module.exports.create = (event, context, callback) => {
   const timestamp = new Date().getTime().toString();
   const data = JSON.parse(event.body);
 
-  if (typeof data.text !== 'string') {
-    console.error('Validation Failed');
-    callback(null, {
-      statusCode: 400,
-      headers: { 'Content-Type': 'text/plain' },
-      body: 'Couldn\'t create the item.',
-    });
-    return;
-  }
-
   const params = {
     TableName: 'PrometheonServiceRecords',
     Item: {
