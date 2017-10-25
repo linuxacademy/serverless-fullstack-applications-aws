@@ -40,7 +40,7 @@
             "S3Key": "aws/s3/lambda_console_practical/sls1_s3_lab1_lambda_console_practical_datalaoder.zip"
         },
         "Handler": "dynamo_autofill.handler",
-        "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },        
+        "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },
         "Runtime": "python3.6",
         "Timeout": "60"
       },
@@ -127,8 +127,8 @@
           "S3Key": "aws/s3/lambda_console_practical/sls1_s3_lab1_lambda_console_practical_createjs.zip"
         },
         "FunctionName" : "PrometheonCreateServiceRecord",
-        "Handler" : "index.create",
-        "Role" : "DynamoDBFullLambdaAccess",
+        "Handler" : "create.create",
+        "Role": { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },  
         "Runtime" : "nodejs6.10"
       },
       "DependsOn" : ["LambdaExecutionRoleForStudent"]

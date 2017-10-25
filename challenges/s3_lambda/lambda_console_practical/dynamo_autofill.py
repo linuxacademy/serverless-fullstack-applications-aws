@@ -52,7 +52,7 @@ def add_random_data_to_table(num_items, dynamo_table):
         time.sleep(0.1)
         counter += 1
 
-def add_test_val_for_student_to_check_for()
+def add_test_val_for_student_to_check_for(dynamo_table):
     dynamo_table.put_item(
             Item={
                 'clientId': 'protowtires',
@@ -64,7 +64,7 @@ def add_test_val_for_student_to_check_for()
             }
         )
 
-def add_test_val_for_us_to_check_for()
+def add_test_val_for_us_to_check_for(dynamo_table):
     dynamo_table.put_item(
             Item={
                 'clientId': 'toystoystoys',
@@ -90,6 +90,8 @@ def handler(event, context):
     service_record_table = boto3.resource('dynamodb').Table('PrometheonServiceRecords')
     
     add_random_data_to_table(245, service_record_table)
+    add_test_val_for_student_to_check_for(service_record_table)
+    add_test_val_for_us_to_check_for(service_record_table)
 
     # Return resposne to CloudFormation saying this was successful
     cf_response.send(event, context, 'SUCCESS', {'Status': 'SUCCESS'})
