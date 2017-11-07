@@ -1,0 +1,92 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Resources" : {
+    "PreppedDynamoDBTable" : {
+      "Type" : "AWS::DynamoDB::Table",
+      "Properties" : {
+        "AttributeDefinitions" : [
+          {
+            "AttributeName" : "Artist",
+            "AttributeType" : "S"
+          },
+          {
+            "AttributeName" : "SongTitle",
+            "AttributeType" : "S"
+          }
+        ],
+        "KeySchema" : [
+          {
+            "AttributeName" : "Artist",
+            "KeyType" : "HASH"
+          },
+          {
+            "AttributeName" : "SongTitle",
+            "KeyType" : "RANGE"
+          }
+        ],
+        "ProvisionedThroughput" : {
+          "ReadCapacityUnits" : "5",
+          "WriteCapacityUnits" : "5"
+        },
+        "TableName" : "PrometheonMusic"
+        }
+    },
+    "DynamoDBDataLoaderFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+            "S3Bucket": "cloudassessments-lab-files",
+            "S3Key": "aws/s3/dynamodb/sls2_s2_lab2_dynamodb_node_sdk.zip"
+        },
+        "Handler": "dynamo_autofill.handler",
+        "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },        
+        "Runtime": "python3.6",
+        "Timeout": "60"
+      },
+      "DependsOn" : "LambdaExecutionRole"
+    },
+    "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+              "Effect": "Allow",
+              "Principal": {"Service": ["lambda.amazonaws.com"]},
+              "Action": ["sts:AssumeRole"]
+          }]
+        },
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "root",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [{
+                "Effect": "Allow",
+                "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+                "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": ["dynamodb:PutItem","dynamodb:UpdateItem","dynamodb:DeleteItem"],
+                "Resource": "arn:aws:dynamodb:*:*:*"
+            }]
+          }
+        }]
+      }
+    },
+    "DataLoader": {
+      "Type": "Custom::DynamoDBDataLoader",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "DynamoDBDataLoaderFunction",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn" : ["LambdaExecutionRole", "DynamoDBDataLoaderFunction", "PreppedDynamoDBTable"]
+    }
+  }
+}
