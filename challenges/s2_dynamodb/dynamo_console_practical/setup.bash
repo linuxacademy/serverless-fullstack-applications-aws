@@ -1,4 +1,4 @@
-aws/s3/dynamodb_console_practical/#!/bin/bash
+#!/bin/bash
 
 # Assumes python v3.6
 # Create and initialize a Python Virtual Environment
