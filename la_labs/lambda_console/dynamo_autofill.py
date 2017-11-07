@@ -7,8 +7,6 @@ import cf_response
 import time
 import json
 
-dynamo_db = boto3.client('dynamodb')
-
 def handler(event, context):
     print(event)
     print(context)

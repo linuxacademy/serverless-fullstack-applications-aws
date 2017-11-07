@@ -37,7 +37,7 @@
       "Properties": {
         "Code": {
             "S3Bucket": "cloudassessments-lab-files",
-            "S3Key": "aws/s3/lambda_console_practical/sls1_s3_lab1_lambda_console_practical_datalaoder.zip"
+            "S3Key": "aws/s3/lambda_console_practical/sls2_s3_lab1_lambda_console_practical_datalaoder.zip"
         },
         "Handler": "dynamo_autofill.handler",
         "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },
