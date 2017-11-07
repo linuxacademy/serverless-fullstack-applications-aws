@@ -4,7 +4,7 @@ var documentClient = new AWS.DynamoDB.DocumentClient();
 
 var csvToJson = require('convert-csv-to-json');
 
-var json = csvToJson.fieldDelimiter(',').getJsonFromCsv("musicData.csv");
+var json = csvToJson.fieldDelimiter(',').getJsonFromCsv('musicData.csv');
 
 for (entry in json) {
     console.log("THIS IS THE ENTRY")
