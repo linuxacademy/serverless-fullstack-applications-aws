@@ -1,5 +1,11 @@
-wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/create.zip
-wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/get.zip
 wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/update.zip
 wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/delete.zip
 wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/list.zip
+
+unzip update.zip
+unzip delete.zip
+unzip list.zip
+
+rm update.zip
+rm delete.zip
+rm list.zip
