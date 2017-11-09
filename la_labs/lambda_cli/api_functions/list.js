@@ -6,7 +6,6 @@ AWS.config.update({region:'us-east-1'});
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.list = (event, context, callback) => {
-  const data = JSON.parse(event.body);
 
   const params = {
     TableName: 'PrometheonMusic',
@@ -21,7 +20,7 @@ module.exports.list = (event, context, callback) => {
       callback(null, {
         statusCode: error.statusCode || 501,
         headers: { 'Content-Type': 'text/plain' },
-        body: 'Couldn\'t fetch the todo item.',
+        body: 'Couldn\'t fetch the items.',
       });
       return;
     }

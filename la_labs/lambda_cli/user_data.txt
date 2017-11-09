@@ -1,3 +1,5 @@
+aws configure set default.region us-east-1
+
 wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/update.zip
 wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/delete.zip
 wget https://s3.amazonaws.com/cloudassessments-lab-files/aws/s3/lambda_cli_practical/list.zip
