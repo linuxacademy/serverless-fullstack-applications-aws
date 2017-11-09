@@ -21,7 +21,7 @@ module.exports.update = (event, context, callback) => {
         ":Genre": data.Genre,
         ":Price": data.Price
     },
-    ReturnValues:"UPDATED_NEW"
+    ReturnValues:"ALL_NEW"
   };
 
   // write the item to the database
