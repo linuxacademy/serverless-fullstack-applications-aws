@@ -39,9 +39,3 @@ aws s3 mv ./get.zip s3://cloudassessments-lab-files/aws/s3/lambda_cli_practical/
 aws s3 mv ./update.zip s3://cloudassessments-lab-files/aws/s3/lambda_cli_practical/update.zip --acl public-read
 aws s3 mv ./delete.zip s3://cloudassessments-lab-files/aws/s3/lambda_cli_practical/delete.zip --acl public-read
 aws s3 mv ./list.zip s3://cloudassessments-lab-files/aws/s3/lambda_cli_practical/list.zip --acl public-read
-
-rm ./create.zip
-rm ./get.zip
-rm ./update.zip
-rm ./delete.zip
-rm ./list.zip
