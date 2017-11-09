@@ -28,11 +28,11 @@ echo "Deploying 'package.zip' to AWS"
 aws s3 mv ./package.zip s3://cloudassessments-lab-files/aws/s3/lambda_cli_practical/sls2_s3_lab2_lambda_cli_datalaoder.zip --acl public-read
 
 echo "Packaging all the other Lambda functions to s3"
-zip ./create.zip ./api_functions/create.js
-zip ./get.zip ./api_functions/get.js
-zip ./update.zip ./api_functions/update.js
-zip ./delete.zip ./api_functions/delete.js
-zip ./list.zip ./api_functions/list.js
+zip -j ./create.zip ./api_functions/create.js
+zip -j ./get.zip ./api_functions/get.js
+zip -j ./update.zip ./api_functions/update.js
+zip -j ./delete.zip ./api_functions/delete.js
+zip -j ./list.zip ./api_functions/list.js
 
 aws s3 mv ./create.zip s3://cloudassessments-lab-files/aws/s3/lambda_cli_practical/create.zip --acl public-read
 aws s3 mv ./get.zip s3://cloudassessments-lab-files/aws/s3/lambda_cli_practical/get.zip --acl public-read
