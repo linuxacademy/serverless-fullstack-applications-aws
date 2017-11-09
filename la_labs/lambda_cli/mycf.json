@@ -115,10 +115,10 @@
           "S3Key": "aws/s3/lambda_cli_practical/create.zip"
         },
         "Description" : "The function to get data from DynamoDB",
-        "FunctionName" : "get",
+        "FunctionName" : "create",
         "Handler" : "create.create",
-        "Role" : "DynamoDBFullLambdaAccess",
-        "Runtime" : "node"
+        "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
+        "Runtime" : "nodejs6.10"
       },
       "DependsOn" : ["LambdaExecutionRoleForStudent"]
     },
@@ -132,8 +132,8 @@
         "Description" : "The function to get data from DynamoDB",
         "FunctionName" : "get",
         "Handler" : "get.get",
-        "Role" : "DynamoDBFullLambdaAccess",
-        "Runtime" : "node"
+        "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
+        "Runtime" : "nodejs6.10"
       },
       "DependsOn" : ["LambdaExecutionRoleForStudent"]
     },
