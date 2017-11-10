@@ -114,7 +114,7 @@
           "S3Bucket": "cloudassessments-lab-files",
           "S3Key": "aws/s3/lambda_cli_practical/create.zip"
         },
-        "Description" : "The function to get data from DynamoDB",
+        "Description" : "The function to create items in DynamoDB",
         "FunctionName" : "create",
         "Handler" : "create.create",
         "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
