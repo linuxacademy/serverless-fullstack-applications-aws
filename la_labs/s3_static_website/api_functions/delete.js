@@ -32,7 +32,7 @@ module.exports.delete = (event, context, callback) => {
     // create a response
     const response = {
       statusCode: 200,
-      body: JSON.stringify(result),
+      body: JSON.stringify('Item Deleted'),
     };
     callback(null, response);
   });
