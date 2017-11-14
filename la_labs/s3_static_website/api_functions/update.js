@@ -40,7 +40,7 @@ module.exports.update = (event, context, callback) => {
     // create a response
     const response = {
       statusCode: 200,
-      body: JSON.stringify(params.Item),
+      body: JSON.stringify("Item Updated"),
     };
     callback(null, response);
   });
