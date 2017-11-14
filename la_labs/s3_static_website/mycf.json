@@ -205,7 +205,7 @@
     "LambdaFunctionPermissionCreate": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
-        "Action": ["lambda:invokeFunction"],
+        "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["CreateLambdaFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Join": ["",
@@ -216,7 +216,7 @@
     "LambdaFunctionPermissionGet": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
-        "Action": ["lambda:invokeFunction"],
+        "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["GetLambdaFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Join": ["",
@@ -227,7 +227,7 @@
     "LambdaFunctionPermissionUpdate": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
-        "Action": ["lambda:invokeFunction"],
+        "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["UpdateLambdaFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Join": ["",
@@ -238,7 +238,7 @@
     "LambdaFunctionPermissionDelete": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
-        "Action": ["lambda:invokeFunction"],
+        "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["DeleteLambdaFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Join": ["",
@@ -249,7 +249,7 @@
     "LambdaFunctionPermissionList": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
-        "Action": ["lambda:invokeFunction"],
+        "Action": "lambda:invokeFunction",
         "FunctionName": {"Fn::GetAtt": ["ListLambdaFunction", "Arn"]},
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {"Fn::Join": ["",
