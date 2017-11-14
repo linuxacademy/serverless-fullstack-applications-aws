@@ -37,7 +37,7 @@
       "Properties": {
         "Code": {
             "S3Bucket": "cloudassessments-lab-files",
-            "S3Key": "aws/s3/api_gateway/sls2_s4_lab1_api_gateway_datalaoder.zip"
+            "S3Key": "aws/s3/s3_static_site/sls2_s5_lab1_static_site_datalaoder.zip"
         },
         "Handler": "dynamo_autofill.handler",
         "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },
@@ -112,7 +112,7 @@
       "Properties" : {
         "Code" : {
           "S3Bucket": "cloudassessments-lab-files",
-          "S3Key": "aws/s3/api_gateway/create.zip"
+          "S3Key": "aws/s3/s3_static_site/create.zip"
         },
         "Description" : "The function to create data in DynamoDB",
         "FunctionName" : "create",
@@ -127,7 +127,7 @@
       "Properties" : {
         "Code" : {
           "S3Bucket": "cloudassessments-lab-files",
-          "S3Key": "aws/s3/api_gateway/list.zip"
+          "S3Key": "aws/s3/s3_static_site/list.zip"
         },
         "Description" : "The function to list data from DynamoDB",
         "FunctionName" : "list",
@@ -142,7 +142,7 @@
       "Properties" : {
         "Code" : {
           "S3Bucket": "cloudassessments-lab-files",
-          "S3Key": "aws/s3/api_gateway/get.zip"
+          "S3Key": "aws/s3/s3_static_site/get.zip"
         },
         "Description" : "The function to get data from DynamoDB",
         "FunctionName" : "get",
@@ -157,7 +157,7 @@
       "Properties" : {
         "Code" : {
           "S3Bucket": "cloudassessments-lab-files",
-          "S3Key": "aws/s3/api_gateway/update.zip"
+          "S3Key": "aws/s3/s3_static_site/update.zip"
         },
         "Description" : "The function to update data in DynamoDB",
         "FunctionName" : "update",
@@ -172,7 +172,7 @@
       "Properties" : {
         "Code" : {
           "S3Bucket": "cloudassessments-lab-files",
-          "S3Key": "aws/s3/api_gateway/delete.zip"
+          "S3Key": "aws/s3/s3_static_site/delete.zip"
         },
         "Description" : "The function to delete data from DynamoDB",
         "FunctionName" : "delete",

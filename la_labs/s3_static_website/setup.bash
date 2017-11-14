@@ -25,7 +25,7 @@ deactivate
 rm -r ./.env
 
 echo "Deploying 'package.zip' to AWS"
-aws s3 mv ./package.zip s3://cloudassessments-lab-files/aws/s3/api_gateway/sls2_s4_lab1_api_gateway_datalaoder.zip --acl public-read
+aws s3 mv ./package.zip s3://cloudassessments-lab-files/aws/s3/s3_static_site/sls2_s5_lab1_static_site_datalaoder.zip --acl public-read
 
 echo "Packaging all the other Lambda functions to s3"
 zip -j ./create.zip ./api_functions/create.js
@@ -34,8 +34,8 @@ zip -j ./update.zip ./api_functions/update.js
 zip -j ./delete.zip ./api_functions/delete.js
 zip -j ./list.zip ./api_functions/list.js
 
-aws s3 mv ./create.zip s3://cloudassessments-lab-files/aws/s3/api_gateway/create.zip --acl public-read
-aws s3 mv ./get.zip s3://cloudassessments-lab-files/aws/s3/api_gateway/get.zip --acl public-read
-aws s3 mv ./update.zip s3://cloudassessments-lab-files/aws/s3/api_gateway/update.zip --acl public-read
-aws s3 mv ./delete.zip s3://cloudassessments-lab-files/aws/s3/api_gateway/delete.zip --acl public-read
-aws s3 mv ./list.zip s3://cloudassessments-lab-files/aws/s3/api_gateway/list.zip --acl public-read
+aws s3 mv ./create.zip s3://cloudassessments-lab-files/aws/s3/s3_static_site/create.zip --acl public-read
+aws s3 mv ./get.zip s3://cloudassessments-lab-files/aws/s3/s3_static_site/get.zip --acl public-read
+aws s3 mv ./update.zip s3://cloudassessments-lab-files/aws/s3/s3_static_site/update.zip --acl public-read
+aws s3 mv ./delete.zip s3://cloudassessments-lab-files/aws/s3/s3_static_site/delete.zip --acl public-read
+aws s3 mv ./list.zip s3://cloudassessments-lab-files/aws/s3/s3_static_site/list.zip --acl public-read
