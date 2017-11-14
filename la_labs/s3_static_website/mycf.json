@@ -1,0 +1,499 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Resources" : {
+    "PreppedDynamoDBTable" : {
+      "Type" : "AWS::DynamoDB::Table",
+      "Properties" : {
+        "AttributeDefinitions" : [
+          {
+            "AttributeName" : "Artist",
+            "AttributeType" : "S"
+          },
+          {
+            "AttributeName" : "SongTitle",
+            "AttributeType" : "S"
+          }
+        ],
+        "KeySchema" : [
+          {
+            "AttributeName" : "Artist",
+            "KeyType" : "HASH"
+          },
+          {
+            "AttributeName" : "SongTitle",
+            "KeyType" : "RANGE"
+          }
+        ],
+        "ProvisionedThroughput" : {
+          "ReadCapacityUnits" : "5",
+          "WriteCapacityUnits" : "5"
+        },
+        "TableName" : "PrometheonMusic"
+        }
+    },
+    "DynamoDBDataLoaderFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+            "S3Bucket": "cloudassessments-lab-files",
+            "S3Key": "aws/s3/api_gateway/sls2_s4_lab1_api_gateway_datalaoder.zip"
+        },
+        "Handler": "dynamo_autofill.handler",
+        "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },
+        "Runtime": "python3.6",
+        "Timeout": "60"
+      },
+      "DependsOn" : "LambdaExecutionRole"
+    },
+    "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+              "Effect": "Allow",
+              "Principal": {"Service": ["lambda.amazonaws.com"]},
+              "Action": ["sts:AssumeRole"]
+          }]
+        },
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "root",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [{
+                "Effect": "Allow",
+                "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+                "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": ["dynamodb:PutItem","dynamodb:UpdateItem","dynamodb:DeleteItem"],
+                "Resource": "arn:aws:dynamodb:*:*:*"
+            }]
+          }
+        }]
+      }
+    },
+    "LambdaExecutionRoleForStudent": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+              "Effect": "Allow",
+              "Principal": {"Service": ["lambda.amazonaws.com"]},
+              "Action": ["sts:AssumeRole"]
+          }]
+        },
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "root",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [{
+                "Effect": "Allow",
+                "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+                "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": ["dynamodb:*"],
+                "Resource": "arn:aws:dynamodb:*:*:*"
+            }]
+          }
+        }],
+        "RoleName": "DynamoDBFullLambdaAccess"
+      }
+    },
+    "CreateLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties" : {
+        "Code" : {
+          "S3Bucket": "cloudassessments-lab-files",
+          "S3Key": "aws/s3/api_gateway/create.zip"
+        },
+        "Description" : "The function to create data in DynamoDB",
+        "FunctionName" : "create",
+        "Handler" : "create.create",
+        "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
+        "Runtime" : "nodejs6.10"
+      },
+      "DependsOn" : ["LambdaExecutionRoleForStudent"]
+    },
+    "ListLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties" : {
+        "Code" : {
+          "S3Bucket": "cloudassessments-lab-files",
+          "S3Key": "aws/s3/api_gateway/list.zip"
+        },
+        "Description" : "The function to list data from DynamoDB",
+        "FunctionName" : "list",
+        "Handler" : "list.list",
+        "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
+        "Runtime" : "nodejs6.10"
+      },
+      "DependsOn" : ["LambdaExecutionRoleForStudent"]
+    },
+    "GetLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties" : {
+        "Code" : {
+          "S3Bucket": "cloudassessments-lab-files",
+          "S3Key": "aws/s3/api_gateway/get.zip"
+        },
+        "Description" : "The function to get data from DynamoDB",
+        "FunctionName" : "get",
+        "Handler" : "get.get",
+        "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
+        "Runtime" : "nodejs6.10"
+      },
+      "DependsOn" : ["LambdaExecutionRoleForStudent"]
+    },
+    "UpdateLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties" : {
+        "Code" : {
+          "S3Bucket": "cloudassessments-lab-files",
+          "S3Key": "aws/s3/api_gateway/update.zip"
+        },
+        "Description" : "The function to update data in DynamoDB",
+        "FunctionName" : "update",
+        "Handler" : "update.update",
+        "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
+        "Runtime" : "nodejs6.10"
+      },
+      "DependsOn" : ["LambdaExecutionRoleForStudent"]
+    },
+    "DeleteLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties" : {
+        "Code" : {
+          "S3Bucket": "cloudassessments-lab-files",
+          "S3Key": "aws/s3/api_gateway/delete.zip"
+        },
+        "Description" : "The function to delete data from DynamoDB",
+        "FunctionName" : "delete",
+        "Handler" : "delete.delete",
+        "Role" : { "Fn::GetAtt" : ["LambdaExecutionRoleForStudent", "Arn"] },
+        "Runtime" : "nodejs6.10"
+      },
+      "DependsOn" : ["LambdaExecutionRoleForStudent"]
+    },
+    "DataLoader": {
+      "Type": "Custom::DynamoDBDataLoader",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "DynamoDBDataLoaderFunction",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn" : ["LambdaExecutionRole", "DynamoDBDataLoaderFunction", "PreppedDynamoDBTable"]
+    },
+    "PrometheonApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "prometheon",
+        "Description": "API used for prometheon requests",
+        "FailOnWarnings" : true
+      }
+    },
+    "LambdaFunctionPermissionCreate": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": ["lambda:invokeFunction"],
+        "FunctionName": {"Fn::GetAtt": ["CreateLambdaFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Join": ["",
+          ["arn:aws:execute-api:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":", {"Ref": "PrometheonApi"}, "/*"]
+        ]}
+      }
+    },
+    "LambdaFunctionPermissionGet": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": ["lambda:invokeFunction"],
+        "FunctionName": {"Fn::GetAtt": ["GetLambdaFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Join": ["",
+          ["arn:aws:execute-api:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":", {"Ref": "PrometheonApi"}, "/*"]
+        ]}
+      }
+    },
+    "LambdaFunctionPermissionUpdate": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": ["lambda:invokeFunction"],
+        "FunctionName": {"Fn::GetAtt": ["UpdateLambdaFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Join": ["",
+          ["arn:aws:execute-api:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":", {"Ref": "PrometheonApi"}, "/*"]
+        ]}
+      }
+    },
+    "LambdaFunctionPermissionDelete": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": ["lambda:invokeFunction"],
+        "FunctionName": {"Fn::GetAtt": ["DeleteLambdaFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Join": ["",
+          ["arn:aws:execute-api:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":", {"Ref": "PrometheonApi"}, "/*"]
+        ]}
+      }
+    },
+    "LambdaFunctionPermissionList": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": ["lambda:invokeFunction"],
+        "FunctionName": {"Fn::GetAtt": ["ListLambdaFunction", "Arn"]},
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {"Fn::Join": ["",
+          ["arn:aws:execute-api:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":", {"Ref": "PrometheonApi"}, "/*"]
+        ]}
+      }
+    },
+    "ApiDeployment": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "DependsOn": [
+        "ApiMethodCreate",
+        "ApiMethodList",
+        "ApiMethodGet",
+        "ApiMethodUpdate",
+        "ApiMethodDelete"
+      ],
+      "Properties": {
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "StageName": "dev"
+      }
+    },
+    "PrometheonApiResourceRoot": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "ParentId": {"Fn::GetAtt": ["PrometheonApi", "RootResourceId"]},
+        "PathPart": "prometheon"
+      }
+    },
+    "PrometheonApiResourceId": {
+      "DependsOn": "PrometheonApiResourceRoot",
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "ParentId": { "Ref": "PrometheonApiResourceRoot"},
+        "PathPart": "id"
+      }
+    },
+    "ApiMethodCreate": {
+      "DependsOn": "LambdaFunctionPermissionCreate",
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "ResourceId": {"Ref": "PrometheonApiResourceRoot"},
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "HttpMethod": "POST",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "Type": "AWS_PROXY",
+          "IntegrationHttpMethod": "POST",
+          "Uri": {"Fn::Join" : ["",
+            [
+              "arn:aws:apigateway:", 
+              {"Ref": "AWS::Region"}, 
+              ":lambda:path/2015-03-31/functions/", 
+              {"Fn::GetAtt": ["CreateLambdaFunction", "Arn"]}, 
+              "/invocations"
+            ]
+          ]}
+        }
+      }
+    },
+    "ApiMethodList": {
+      "DependsOn": "LambdaFunctionPermissionList",
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "ResourceId": {"Ref": "PrometheonApiResourceRoot"},
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "HttpMethod": "GET",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "Type": "AWS_PROXY",
+          "IntegrationHttpMethod": "POST",
+          "Uri": {"Fn::Join" : ["",
+            [
+              "arn:aws:apigateway:", 
+              {"Ref": "AWS::Region"}, 
+              ":lambda:path/2015-03-31/functions/", 
+              {"Fn::GetAtt": ["ListLambdaFunction", "Arn"]}, 
+              "/invocations"
+            ]
+          ]}
+        }
+      }
+    },
+    "ApiMethodRootOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'false'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "PrometheonApiResourceRoot"
+        },
+        "RestApiId": {
+          "Ref": "PrometheonApi"
+        }
+      }
+    },
+    "ApiMethodGet": {
+      "DependsOn": "LambdaFunctionPermissionGet",
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "ResourceId": {"Ref": "PrometheonApiResourceId"},
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "HttpMethod": "GET",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "Type": "AWS_PROXY",
+          "IntegrationHttpMethod": "POST",
+          "Uri": {"Fn::Join" : ["",
+            [
+              "arn:aws:apigateway:", 
+              {"Ref": "AWS::Region"}, 
+              ":lambda:path/2015-03-31/functions/", 
+              {"Fn::GetAtt": ["GetLambdaFunction", "Arn"]}, 
+              "/invocations"
+            ]
+          ]}
+        }
+      }
+    },
+    "ApiMethodUpdate": {
+      "DependsOn": "LambdaFunctionPermissionUpdate",
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "ResourceId": {"Ref": "PrometheonApiResourceId"},
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "HttpMethod": "PUT",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "Type": "AWS_PROXY",
+          "IntegrationHttpMethod": "POST",
+          "Uri": {"Fn::Join" : ["",
+            [
+              "arn:aws:apigateway:", 
+              {"Ref": "AWS::Region"}, 
+              ":lambda:path/2015-03-31/functions/", 
+              {"Fn::GetAtt": ["UpdateLambdaFunction", "Arn"]}, 
+              "/invocations"
+            ]
+          ]}
+        }
+      }
+    },
+    "ApiMethodDelete": {
+      "DependsOn": "LambdaFunctionPermissionDelete",
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "ResourceId": {"Ref": "PrometheonApiResourceId"},
+        "RestApiId": {"Ref": "PrometheonApi"},
+        "HttpMethod": "DELETE",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "Type": "AWS_PROXY",
+          "IntegrationHttpMethod": "POST",
+          "Uri": {"Fn::Join" : ["",
+            [
+              "arn:aws:apigateway:", 
+              {"Ref": "AWS::Region"}, 
+              ":lambda:path/2015-03-31/functions/", 
+              {"Fn::GetAtt": ["DeleteLambdaFunction", "Arn"]}, 
+              "/invocations"
+            ]
+          ]}
+        }
+      }
+    },
+    "ApiMethodIdOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,PUT,GET'",
+                "method.response.header.Access-Control-Allow-Credentials": "'false'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "PrometheonApiResourceId"
+        },
+        "RestApiId": {
+          "Ref": "PrometheonApi"
+        }
+      }
+    }
+  }
+}
