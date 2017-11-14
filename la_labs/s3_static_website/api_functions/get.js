@@ -6,7 +6,7 @@ AWS.config.update({region:'us-east-1'});
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.get = (event, context, callback) => {
-  const data = JSON.parse(event.body);
+  const data = event.queryStringParameters;
 
   const params = {
     TableName: 'PrometheonMusic',
